@@ -1,0 +1,230 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "General Mobile ID525",
+        "description": "Home Assistant will use the router's single administrator session: while it polls, the web UI login takes the session over and Home Assistant waits for a while before logging in again. Use the Polling switch to pause it.",
+        "data": {
+          "host": "Host",
+          "username": "Username",
+          "password": "Password"
+        },
+        "data_description": {
+          "host": "IP address or hostname of the router.",
+          "username": "Web UI administrator username.",
+          "password": "Web UI administrator password."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate",
+        "description": "The router rejected the password for {username}.",
+        "data": {
+          "password": "Password"
+        },
+        "data_description": {
+          "password": "Web UI administrator password."
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure",
+        "data": {
+          "host": "Host",
+          "username": "Username",
+          "password": "Password"
+        },
+        "data_description": {
+          "host": "IP address or hostname of the router.",
+          "username": "Web UI administrator username.",
+          "password": "Web UI administrator password."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the router.",
+      "invalid_auth": "Invalid username or password.",
+      "login_locked": "The router is temporarily refusing logins after too many failed attempts. Wait a few minutes before retrying.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This router is already configured.",
+      "reauth_successful": "Re-authentication was successful.",
+      "reconfigure_successful": "Reconfiguration was successful.",
+      "wrong_device": "These settings point to a different router."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Polling options",
+        "data": {
+          "scan_interval": "Update interval",
+          "kick_backoff": "Pause after a web UI login",
+          "fetch_sms": "Read SMS messages"
+        },
+        "data_description": {
+          "scan_interval": "Seconds between two reads of the router.",
+          "kick_backoff": "Minutes to wait before logging in again when another login (e.g. the web UI) took over the session.",
+          "fetch_sms": "Expose the unread SMS counter and the latest message. Messages are never marked as read."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "sim_state": {
+        "name": "SIM state",
+        "state": {
+          "unknown": "Unknown",
+          "no_sim": "No SIM",
+          "inserted": "Inserted",
+          "invalid_sim": "Invalid SIM",
+          "enter_pin": "PIN required",
+          "pin_locked": "PIN locked",
+          "puk_locked": "PUK locked",
+          "sim_locked": "SIM locked",
+          "connected": "Connected",
+          "connected_roaming": "Connected (roaming)"
+        }
+      },
+      "signal_level": {
+        "name": "Signal level"
+      },
+      "network": {
+        "name": "Network"
+      },
+      "connected_since": {
+        "name": "Connected since"
+      },
+      "data_sent": {
+        "name": "Data sent"
+      },
+      "data_received": {
+        "name": "Data received"
+      },
+      "wan_ipv4": {
+        "name": "WAN IPv4 address"
+      },
+      "wan_ipv6": {
+        "name": "WAN IPv6 address"
+      },
+      "connected_clients": {
+        "name": "Connected clients"
+      },
+      "wifi_clients_2g": {
+        "name": "Wi-Fi 2.4 GHz clients"
+      },
+      "wifi_clients_5g": {
+        "name": "Wi-Fi 5 GHz clients"
+      },
+      "cpu_usage": {
+        "name": "CPU usage"
+      },
+      "memory_usage": {
+        "name": "Memory usage"
+      },
+      "download_rate": {
+        "name": "Download rate"
+      },
+      "upload_rate": {
+        "name": "Upload rate"
+      },
+      "last_boot": {
+        "name": "Last boot"
+      },
+      "unread_sms": {
+        "name": "Unread SMS",
+        "state_attributes": {
+          "total_messages": {
+            "name": "Total messages"
+          },
+          "last_message_from": {
+            "name": "Last message from"
+          },
+          "last_message_text": {
+            "name": "Last message text"
+          },
+          "last_message_time": {
+            "name": "Last message time"
+          }
+        }
+      },
+      "polling_state": {
+        "name": "Polling state",
+        "state": {
+          "active": "Active",
+          "paused": "Paused",
+          "backoff": "Waiting (web UI in use)"
+        },
+        "state_attributes": {
+          "resumes_at": {
+            "name": "Resumes at"
+          }
+        }
+      },
+      "nr_rsrp": {
+        "name": "5G RSRP"
+      },
+      "nr_rsrq": {
+        "name": "5G RSRQ"
+      },
+      "nr_sinr": {
+        "name": "5G SINR"
+      },
+      "nr_band": {
+        "name": "5G band"
+      },
+      "nr_bandwidth": {
+        "name": "5G bandwidth"
+      },
+      "nr_pci": {
+        "name": "5G PCI"
+      },
+      "nr_arfcn": {
+        "name": "5G ARFCN"
+      },
+      "nr_cell_id": {
+        "name": "5G cell ID"
+      },
+      "lte_rsrp": {
+        "name": "4G RSRP"
+      },
+      "lte_rsrq": {
+        "name": "4G RSRQ"
+      },
+      "lte_sinr": {
+        "name": "4G SINR"
+      },
+      "lte_band": {
+        "name": "4G band"
+      },
+      "lte_bandwidth": {
+        "name": "4G bandwidth"
+      },
+      "lte_pci": {
+        "name": "4G PCI"
+      },
+      "lte_arfcn": {
+        "name": "4G ARFCN"
+      },
+      "lte_cell_id": {
+        "name": "4G cell ID"
+      }
+    },
+    "binary_sensor": {
+      "cellular_connected": {
+        "name": "Cellular connection"
+      },
+      "roaming": {
+        "name": "Roaming"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
+      }
+    },
+    "switch": {
+      "polling": {
+        "name": "Polling"
+      }
+    }
+  }
+}

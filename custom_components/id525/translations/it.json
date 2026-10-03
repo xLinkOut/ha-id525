@@ -1,0 +1,230 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "General Mobile ID525",
+        "description": "Home Assistant userà l'unica sessione amministratore del router: mentre interroga il router, un accesso alla web UI prende la sessione e Home Assistant attende un po' prima di riconnettersi. Usa l'interruttore Polling per metterlo in pausa.",
+        "data": {
+          "host": "Host",
+          "username": "Nome utente",
+          "password": "Password"
+        },
+        "data_description": {
+          "host": "Indirizzo IP o nome host del router.",
+          "username": "Nome utente amministratore della web UI.",
+          "password": "Password amministratore della web UI."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Nuova autenticazione",
+        "description": "Il router ha rifiutato la password per {username}.",
+        "data": {
+          "password": "Password"
+        },
+        "data_description": {
+          "password": "Password amministratore della web UI."
+        }
+      },
+      "reconfigure": {
+        "title": "Riconfigura",
+        "data": {
+          "host": "Host",
+          "username": "Nome utente",
+          "password": "Password"
+        },
+        "data_description": {
+          "host": "Indirizzo IP o nome host del router.",
+          "username": "Nome utente amministratore della web UI.",
+          "password": "Password amministratore della web UI."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile connettersi al router.",
+      "invalid_auth": "Nome utente o password non validi.",
+      "login_locked": "Il router rifiuta temporaneamente gli accessi dopo troppi tentativi falliti. Attendi qualche minuto prima di riprovare.",
+      "unknown": "Errore imprevisto."
+    },
+    "abort": {
+      "already_configured": "Questo router è già configurato.",
+      "reauth_successful": "Nuova autenticazione completata.",
+      "reconfigure_successful": "Riconfigurazione completata.",
+      "wrong_device": "Queste impostazioni puntano a un router diverso."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni di polling",
+        "data": {
+          "scan_interval": "Intervallo di aggiornamento",
+          "kick_backoff": "Pausa dopo un accesso alla web UI",
+          "fetch_sms": "Leggi gli SMS"
+        },
+        "data_description": {
+          "scan_interval": "Secondi tra due letture del router.",
+          "kick_backoff": "Minuti di attesa prima di riconnettersi quando un altro accesso (es. la web UI) ha preso la sessione.",
+          "fetch_sms": "Mostra il numero di SMS non letti e l'ultimo messaggio. I messaggi non vengono mai segnati come letti."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "sim_state": {
+        "name": "Stato SIM",
+        "state": {
+          "unknown": "Sconosciuto",
+          "no_sim": "Nessuna SIM",
+          "inserted": "Inserita",
+          "invalid_sim": "SIM non valida",
+          "enter_pin": "PIN richiesto",
+          "pin_locked": "PIN bloccato",
+          "puk_locked": "PUK bloccato",
+          "sim_locked": "SIM bloccata",
+          "connected": "Connesso",
+          "connected_roaming": "Connesso (roaming)"
+        }
+      },
+      "signal_level": {
+        "name": "Livello segnale"
+      },
+      "network": {
+        "name": "Rete"
+      },
+      "connected_since": {
+        "name": "Connesso dal"
+      },
+      "data_sent": {
+        "name": "Dati inviati"
+      },
+      "data_received": {
+        "name": "Dati ricevuti"
+      },
+      "wan_ipv4": {
+        "name": "Indirizzo IPv4 WAN"
+      },
+      "wan_ipv6": {
+        "name": "Indirizzo IPv6 WAN"
+      },
+      "connected_clients": {
+        "name": "Client connessi"
+      },
+      "wifi_clients_2g": {
+        "name": "Client Wi-Fi 2,4 GHz"
+      },
+      "wifi_clients_5g": {
+        "name": "Client Wi-Fi 5 GHz"
+      },
+      "cpu_usage": {
+        "name": "Utilizzo CPU"
+      },
+      "memory_usage": {
+        "name": "Utilizzo memoria"
+      },
+      "download_rate": {
+        "name": "Velocità download"
+      },
+      "upload_rate": {
+        "name": "Velocità upload"
+      },
+      "last_boot": {
+        "name": "Ultimo avvio"
+      },
+      "unread_sms": {
+        "name": "SMS non letti",
+        "state_attributes": {
+          "total_messages": {
+            "name": "Messaggi totali"
+          },
+          "last_message_from": {
+            "name": "Ultimo messaggio da"
+          },
+          "last_message_text": {
+            "name": "Testo ultimo messaggio"
+          },
+          "last_message_time": {
+            "name": "Ora ultimo messaggio"
+          }
+        }
+      },
+      "polling_state": {
+        "name": "Stato polling",
+        "state": {
+          "active": "Attivo",
+          "paused": "In pausa",
+          "backoff": "In attesa (web UI in uso)"
+        },
+        "state_attributes": {
+          "resumes_at": {
+            "name": "Riprende alle"
+          }
+        }
+      },
+      "nr_rsrp": {
+        "name": "5G RSRP"
+      },
+      "nr_rsrq": {
+        "name": "5G RSRQ"
+      },
+      "nr_sinr": {
+        "name": "5G SINR"
+      },
+      "nr_band": {
+        "name": "Banda 5G"
+      },
+      "nr_bandwidth": {
+        "name": "Larghezza di banda 5G"
+      },
+      "nr_pci": {
+        "name": "5G PCI"
+      },
+      "nr_arfcn": {
+        "name": "5G ARFCN"
+      },
+      "nr_cell_id": {
+        "name": "ID cella 5G"
+      },
+      "lte_rsrp": {
+        "name": "4G RSRP"
+      },
+      "lte_rsrq": {
+        "name": "4G RSRQ"
+      },
+      "lte_sinr": {
+        "name": "4G SINR"
+      },
+      "lte_band": {
+        "name": "Banda 4G"
+      },
+      "lte_bandwidth": {
+        "name": "Larghezza di banda 4G"
+      },
+      "lte_pci": {
+        "name": "4G PCI"
+      },
+      "lte_arfcn": {
+        "name": "4G ARFCN"
+      },
+      "lte_cell_id": {
+        "name": "ID cella 4G"
+      }
+    },
+    "binary_sensor": {
+      "cellular_connected": {
+        "name": "Connessione cellulare"
+      },
+      "roaming": {
+        "name": "Roaming"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
+      }
+    },
+    "switch": {
+      "polling": {
+        "name": "Polling"
+      }
+    }
+  }
+}

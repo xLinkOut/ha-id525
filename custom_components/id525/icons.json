@@ -1,0 +1,116 @@
+{
+  "entity": {
+    "sensor": {
+      "sim_state": {
+        "default": "mdi:sim"
+      },
+      "signal_level": {
+        "default": "mdi:signal-cellular-3"
+      },
+      "network": {
+        "default": "mdi:radio-tower"
+      },
+      "connected_since": {
+        "default": "mdi:timer-outline"
+      },
+      "data_sent": {
+        "default": "mdi:upload-network"
+      },
+      "data_received": {
+        "default": "mdi:download-network"
+      },
+      "wan_ipv4": {
+        "default": "mdi:ip-network"
+      },
+      "wan_ipv6": {
+        "default": "mdi:ip-network"
+      },
+      "connected_clients": {
+        "default": "mdi:devices"
+      },
+      "wifi_clients_2g": {
+        "default": "mdi:wifi"
+      },
+      "wifi_clients_5g": {
+        "default": "mdi:wifi"
+      },
+      "nr_band": {
+        "default": "mdi:radio-tower"
+      },
+      "nr_bandwidth": {
+        "default": "mdi:radio-tower"
+      },
+      "nr_pci": {
+        "default": "mdi:radio-tower"
+      },
+      "nr_arfcn": {
+        "default": "mdi:radio-tower"
+      },
+      "nr_cell_id": {
+        "default": "mdi:radio-tower"
+      },
+      "lte_band": {
+        "default": "mdi:radio-tower"
+      },
+      "lte_bandwidth": {
+        "default": "mdi:radio-tower"
+      },
+      "lte_pci": {
+        "default": "mdi:radio-tower"
+      },
+      "lte_arfcn": {
+        "default": "mdi:radio-tower"
+      },
+      "lte_cell_id": {
+        "default": "mdi:radio-tower"
+      },
+      "cpu_usage": {
+        "default": "mdi:cpu-64-bit"
+      },
+      "memory_usage": {
+        "default": "mdi:memory"
+      },
+      "download_rate": {
+        "default": "mdi:download"
+      },
+      "upload_rate": {
+        "default": "mdi:upload"
+      },
+      "unread_sms": {
+        "default": "mdi:message-text-outline"
+      },
+      "polling_state": {
+        "default": "mdi:sync",
+        "state": {
+          "paused": "mdi:sync-off",
+          "backoff": "mdi:timer-sand"
+        }
+      }
+    },
+    "binary_sensor": {
+      "cellular_connected": {
+        "default": "mdi:signal-cellular-3",
+        "state": {
+          "off": "mdi:signal-cellular-outline"
+        }
+      },
+      "roaming": {
+        "default": "mdi:earth"
+      },
+      "wifi": {
+        "default": "mdi:wifi",
+        "state": {
+          "off": "mdi:wifi-off"
+        }
+      }
+    },
+    "switch": {
+      "polling": {
+        "default": "mdi:sync",
+        "state": {
+          "off": "mdi:sync-off"
+        }
+      }
+    }
+  }
+}
