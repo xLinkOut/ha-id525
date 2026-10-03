@@ -1,0 +1,13 @@
+{
+  "domain": "id525",
+  "name": "General Mobile ID525",
+  "codeowners": ["@xLinkOut"],
+  "config_flow": true,
+  "documentation": "https://github.com/xLinkOut/ha-id525",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/xLinkOut/ha-id525/issues",
+  "loggers": ["id525"],
+  "requirements": ["id525==0.1.0"],
+  "version": "0.1.0"
+}
