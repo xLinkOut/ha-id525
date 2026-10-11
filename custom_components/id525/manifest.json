@@ -8,6 +8,6 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/xLinkOut/ha-id525/issues",
   "loggers": ["id525"],
-  "requirements": ["id525==0.1.0"],
+  "requirements": ["id525 @ https://github.com/xLinkOut/python-id525/archive/9c0fac595702bf20a7cefb8972b26ed0a64fe4eb.zip"],
   "version": "0.1.0"
 }
