@@ -69,3 +69,19 @@ async def test_no_event_without_sms(hass: HomeAssistant, mock_client: MagicMock)
     assert await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()
     assert hass.states.get(SMS_EVENT) is None
+
+
+async def test_renumbered_messages_are_not_new(
+    hass: HomeAssistant,
+    setup_integration: MockConfigEntry,
+    mock_client: MagicMock,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Deleting a message may shift the others' index: they are still the same messages."""
+    payload = fixture_json("sms_reload.json")
+    del payload["message"][1]
+    for message in payload["message"]:
+        message["index"] -= 1
+    mock_client.get_sms.return_value = parse_sms(payload)
+    await _poll(hass, freezer)
+    assert hass.states.get(SMS_EVENT).state == STATE_UNKNOWN  # type: ignore[union-attr]

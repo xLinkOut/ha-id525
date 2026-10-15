@@ -20,11 +20,12 @@ PARALLEL_UPDATES = 0
 
 EVENT_RECEIVED = "received"
 
-type _MessageKey = tuple[int, str, str]
+type _MessageKey = tuple[str, str, str]
 
 
 def _key(message: SmsMessage) -> _MessageKey:
-    return (message.index, message.phone_number, message.time_raw)
+    """Identify a message by content: the router's index may change on deletions."""
+    return (message.phone_number, message.time_raw, message.text)
 
 
 def _inbound_keys(sms: SmsInbox | None) -> set[_MessageKey]:
