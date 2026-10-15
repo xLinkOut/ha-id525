@@ -60,8 +60,11 @@ The router accepts **one administrator session at a time**:
 
 ## Installation
 
+[![Open your Home Assistant instance and open this repository in HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=xLinkOut&repository=ha-id525&category=integration)
+
 1. HACS → ⋮ → *Custom repositories* → add `https://github.com/xLinkOut/ha-id525`
-   (category *Integration*), then install **General Mobile ID525**.
+   (category *Integration*), or use the button above, then install
+   **General Mobile ID525**.
 2. Restart Home Assistant.
 3. *Settings → Devices & services → Add integration → General Mobile ID525*,
    then enter the router address (default `192.168.224.1`), username and password.
