@@ -1208,7 +1208,7 @@ wheels = [
 
 [[package]]
 name = "id525"
-version = "0.1.0"
+version = "0.2.1"
 source = { editable = "../python-id525" }
 dependencies = [
     { name = "aiohttp" },
@@ -1220,6 +1220,7 @@ requires-dist = [{ name = "aiohttp", specifier = ">=3.9" }]
 [package.metadata.requires-dev]
 dev = [
     { name = "mypy", specifier = ">=1.13" },
+    { name = "playwright", specifier = ">=1.63.0" },
     { name = "pytest", specifier = ">=8.3" },
     { name = "pytest-aiohttp", specifier = ">=1.0.5" },
     { name = "pytest-asyncio", specifier = ">=0.24" },
