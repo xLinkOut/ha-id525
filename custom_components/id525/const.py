@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from datetime import timedelta
 from typing import Final
 
 from id525.const import DEFAULT_HOST as ROUTER_DEFAULT_HOST
@@ -18,6 +19,7 @@ DEFAULT_USERNAME: Final = ROUTER_DEFAULT_USERNAME
 
 CONF_KICK_BACKOFF: Final = "kick_backoff"
 CONF_FETCH_SMS: Final = "fetch_sms"
+CONF_ALLOW_CHANGES: Final = "allow_changes"
 
 DEFAULT_SCAN_INTERVAL: Final = 60  # seconds
 MIN_SCAN_INTERVAL: Final = 30
@@ -26,4 +28,7 @@ DEFAULT_KICK_BACKOFF: Final = 15  # minutes
 MIN_KICK_BACKOFF: Final = 1
 MAX_KICK_BACKOFF: Final = 240
 DEFAULT_FETCH_SMS: Final = True
+DEFAULT_ALLOW_CHANGES: Final = False
+SETTINGS_INTERVAL: Final = timedelta(minutes=10)
+"""How often the settings pages (firewall, filters, data usage...) are read."""
 DEFAULT_LOCKOUT_BACKOFF: Final = 300  # seconds, if the router gives no lock_time

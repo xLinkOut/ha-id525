@@ -1,7 +1,7 @@
 # General Mobile ID525 for Home Assistant
 
 Custom integration (HACS) for the **General Mobile ID525** 5G FWA router
-(sold in Italy by TIM as *FWA 5G*). Built on the read-only
+(sold in Italy by TIM as *FWA 5G*). Built on the
 [`id525`](https://github.com/xLinkOut/python-id525) client library.
 
 > Unofficial project, not affiliated with General Mobile or TIM.
@@ -10,13 +10,34 @@ Custom integration (HACS) for the **General Mobile ID525** 5G FWA router
 
 | Platform | Entities |
 |---|---|
-| Sensor | SIM state, signal level, network, data sent/received, connected clients, 5G and 4G RSRP / RSRQ / SINR / band, CPU and memory usage, download/upload rate, unread SMS (latest message as attributes), plus diagnostics: WAN IPs, bandwidth, PCI, ARFCN, cell ID, connected since, last boot, polling state |
-| Binary sensor | Cellular connection, roaming, Wi-Fi |
+| Sensor | SIM state, signal level, network, data sent/received, connected clients, 5G and 4G RSRP / RSRQ / SINR / band, CPU and memory usage, download/upload rate, unread SMS (latest message as attributes), plus diagnostics: WAN IPs, bandwidth, PCI, ARFCN, cell ID, connected since, last boot, polling state, firewall level, VoIP line, SIM PIN / PUK attempts left, data counters reset date, data limit |
+| Binary sensor | Cellular connection, roaming, Wi-Fi, plus diagnostics: VPN passthrough, port forwarding, DMZ, URL / IP / MAC filter (mode and rule count as attributes), SIM PIN lock |
+| Event | **SMS**: fires for every message that arrives while Home Assistant runs (sender and text as attributes, not recorded in history) |
 | Device tracker | One per LAN client (disabled by default) |
 | Switch | **Polling**: turn it off to free the router's admin session |
+| Button | **Restart** the router (only with *Allow commands*) |
 
-The integration is **read-only**: it never changes the router's configuration
-and never marks SMS messages as read.
+The settings (firewall, filters, port forwarding, VoIP, SIM PIN, data usage)
+are read every 10 minutes, not on every update.
+
+By default the integration is **read-only**: it never sends a command to the
+router and never marks SMS messages as read. The *Allow commands* option
+enables the Restart button and the actions below; even then, the router's
+configuration is never changed.
+
+## Actions
+
+Both need the *Allow commands* option and return the router's answer
+(use *Developer tools → Actions*, or `response_variable` in a script).
+
+| Action | Fields | Returns |
+|---|---|---|
+| `id525.ping` | `host`, `count` (1–100), `size`: the router's defaults if omitted | `lines`, one per reply, and `completed` |
+| `id525.traceroute` | `host`: the router's default if omitted | `lines`, one per hop, and `completed`. Can take minutes. |
+
+The router handles one request at a time, so updates wait while a ping or
+traceroute runs. Commands are refused while polling is paused or backing off:
+logging in then would take the session away from the web UI.
 
 ## The single admin session
 
@@ -52,12 +73,13 @@ The router accepts **one administrator session at a time**:
 | Update interval | 60 s | Time between two reads of the router |
 | Pause after a web UI login | 15 min | Back-off after another login took the session |
 | Read SMS messages | on | Unread SMS sensor; message texts are not recorded in history |
+| Allow commands | off | Restart button and the ping / traceroute actions |
 
 ## Privacy
 
 Diagnostics redact credentials, IMEI/IMSI, serial number, phone number, MAC/IP
-addresses, SSIDs and cell identifiers. They don't include the client list or
-SMS contents.
+addresses, SSIDs, cell identifiers and the session token. They don't include
+the client list, SMS contents, filter / forwarding rules or VoIP credentials.
 
 ## Development
 

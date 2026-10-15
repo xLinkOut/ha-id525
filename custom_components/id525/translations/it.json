@@ -55,16 +55,18 @@
   "options": {
     "step": {
       "init": {
-        "title": "Opzioni di polling",
+        "title": "Opzioni",
         "data": {
           "scan_interval": "Intervallo di aggiornamento",
           "kick_backoff": "Pausa dopo un accesso alla web UI",
-          "fetch_sms": "Leggi gli SMS"
+          "fetch_sms": "Leggi gli SMS",
+          "allow_changes": "Consenti comandi"
         },
         "data_description": {
           "scan_interval": "Secondi tra due letture del router.",
           "kick_backoff": "Minuti di attesa prima di riconnettersi quando un altro accesso (es. la web UI) ha preso la sessione.",
-          "fetch_sms": "Mostra il numero di SMS non letti e l'ultimo messaggio. I messaggi non vengono mai segnati come letti."
+          "fetch_sms": "Mostra il numero di SMS non letti e l'ultimo messaggio. I messaggi non vengono mai segnati come letti.",
+          "allow_changes": "Permette a Home Assistant di inviare comandi al router: il pulsante Riavvia e le azioni Ping e Traceroute. Disattivata: l'integrazione si limita a leggere."
         }
       }
     }
@@ -208,6 +210,39 @@
       },
       "lte_cell_id": {
         "name": "ID cella 4G"
+      },
+      "firewall_level": {
+        "name": "Livello firewall",
+        "state": {
+          "low": "Basso",
+          "middle": "Medio",
+          "high": "Alto"
+        }
+      },
+      "voip_status": {
+        "name": "Linea VoIP",
+        "state": {
+          "up": "Registrata",
+          "initializing": "Inizializzazione",
+          "registering": "Registrazione in corso",
+          "unregistering": "Deregistrazione in corso",
+          "error": "Errore",
+          "testing": "Test",
+          "quiescent": "Inattiva",
+          "disabled": "Disattivata"
+        }
+      },
+      "sim_pin_retries": {
+        "name": "Tentativi PIN SIM rimasti"
+      },
+      "sim_puk_retries": {
+        "name": "Tentativi PUK SIM rimasti"
+      },
+      "data_counters_reset": {
+        "name": "Azzeramento contatori dati"
+      },
+      "data_limit": {
+        "name": "Limite dati"
       }
     },
     "binary_sensor": {
@@ -219,11 +254,149 @@
       },
       "wifi": {
         "name": "Wi-Fi"
+      },
+      "vpn_passthrough": {
+        "name": "VPN passthrough"
+      },
+      "port_forwarding": {
+        "name": "Port forwarding",
+        "state_attributes": {
+          "rule_count": {
+            "name": "Regole"
+          }
+        }
+      },
+      "dmz": {
+        "name": "DMZ"
+      },
+      "url_filter": {
+        "name": "Filtro URL",
+        "state_attributes": {
+          "mode": {
+            "name": "Modalità",
+            "state": {
+              "blacklist": "Blocca quelli in elenco",
+              "whitelist": "Consenti solo quelli in elenco"
+            }
+          },
+          "rule_count": {
+            "name": "Regole"
+          }
+        }
+      },
+      "ip_filter": {
+        "name": "Filtro IP",
+        "state_attributes": {
+          "mode": {
+            "name": "Modalità",
+            "state": {
+              "blacklist": "Blocca quelli in elenco",
+              "whitelist": "Consenti solo quelli in elenco"
+            }
+          },
+          "rule_count": {
+            "name": "Regole"
+          }
+        }
+      },
+      "mac_filter": {
+        "name": "Filtro MAC",
+        "state_attributes": {
+          "mode": {
+            "name": "Modalità",
+            "state": {
+              "blacklist": "Blocca quelli in elenco",
+              "whitelist": "Consenti solo quelli in elenco"
+            }
+          },
+          "rule_count": {
+            "name": "Regole"
+          }
+        }
+      },
+      "sim_pin_lock": {
+        "name": "Blocco PIN SIM"
       }
     },
     "switch": {
       "polling": {
         "name": "Polling"
+      }
+    },
+    "event": {
+      "sms": {
+        "name": "SMS",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "received": "Ricevuto"
+            }
+          },
+          "phone_number": {
+            "name": "Mittente"
+          },
+          "text": {
+            "name": "Testo"
+          },
+          "time": {
+            "name": "Ora"
+          }
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "polling_inactive": {
+      "message": "Il router non viene interrogato in questo momento ({state}): riattiva prima il polling. Accedere ora toglierebbe la sessione alla web UI."
+    },
+    "session_taken": {
+      "message": "Un altro accesso (probabilmente la web UI) ha preso la sessione del router. Il polling è in pausa per un po'; riprova più tardi."
+    },
+    "command_failed": {
+      "message": "Il comando al router non è riuscito: {error}"
+    },
+    "invalid_input": {
+      "message": "Il router rifiuterebbe questo valore: {error}"
+    },
+    "commands_disabled": {
+      "message": "I comandi sono disattivati per {title}: attiva \"Consenti comandi\" nelle opzioni dell'integrazione."
+    }
+  },
+  "services": {
+    "ping": {
+      "name": "Ping",
+      "description": "Esegue un ping dal router verso un host e restituisce le risposte. Il router resta occupato finché non ha finito.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Router",
+          "description": "Il router da usare (l'unico, se omesso)."
+        },
+        "host": {
+          "name": "Host",
+          "description": "Nome host o indirizzo IP. Se omesso, quello predefinito del router."
+        },
+        "count": {
+          "name": "Numero",
+          "description": "Numero di richieste echo, una al secondo. Se omesso, quello predefinito del router."
+        },
+        "size": {
+          "name": "Dimensione pacchetto",
+          "description": "Dimensione del payload in byte. Se omessa, quella predefinita del router."
+        }
+      }
+    },
+    "traceroute": {
+      "name": "Traceroute",
+      "description": "Traccia il percorso dal router verso un host e restituisce i salti. Può durare diversi minuti, durante i quali il router non risponde ad altro.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Router",
+          "description": "Il router da usare (l'unico, se omesso)."
+        },
+        "host": {
+          "name": "Host",
+          "description": "Nome host o indirizzo IP. Se omesso, quello predefinito del router."
+        }
       }
     }
   }

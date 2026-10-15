@@ -85,6 +85,28 @@
           "paused": "mdi:sync-off",
           "backoff": "mdi:timer-sand"
         }
+      },
+      "firewall_level": {
+        "default": "mdi:wall-fire"
+      },
+      "voip_status": {
+        "default": "mdi:phone-voip",
+        "state": {
+          "disabled": "mdi:phone-off",
+          "error": "mdi:phone-alert"
+        }
+      },
+      "sim_pin_retries": {
+        "default": "mdi:sim-alert"
+      },
+      "sim_puk_retries": {
+        "default": "mdi:sim-alert"
+      },
+      "data_counters_reset": {
+        "default": "mdi:calendar-refresh"
+      },
+      "data_limit": {
+        "default": "mdi:gauge"
       }
     },
     "binary_sensor": {
@@ -102,6 +124,42 @@
         "state": {
           "off": "mdi:wifi-off"
         }
+      },
+      "vpn_passthrough": {
+        "default": "mdi:vpn"
+      },
+      "port_forwarding": {
+        "default": "mdi:router-network"
+      },
+      "dmz": {
+        "default": "mdi:shield-off-outline",
+        "state": {
+          "off": "mdi:shield-check-outline"
+        }
+      },
+      "url_filter": {
+        "default": "mdi:web-cancel",
+        "state": {
+          "off": "mdi:web"
+        }
+      },
+      "ip_filter": {
+        "default": "mdi:ip-network",
+        "state": {
+          "off": "mdi:ip-network-outline"
+        }
+      },
+      "mac_filter": {
+        "default": "mdi:filter",
+        "state": {
+          "off": "mdi:filter-off"
+        }
+      },
+      "sim_pin_lock": {
+        "default": "mdi:lock",
+        "state": {
+          "off": "mdi:lock-open-variant"
+        }
       }
     },
     "switch": {
@@ -111,6 +169,19 @@
           "off": "mdi:sync-off"
         }
       }
+    },
+    "event": {
+      "sms": {
+        "default": "mdi:message-text"
+      }
+    }
+  },
+  "services": {
+    "ping": {
+      "service": "mdi:lan-pending"
+    },
+    "traceroute": {
+      "service": "mdi:map-marker-path"
     }
   }
 }

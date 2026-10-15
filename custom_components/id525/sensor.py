@@ -20,14 +20,14 @@ from homeassistant.const import (
     UnitOfFrequency,
     UnitOfInformation,
 )
-from id525 import Cell, SimState
+from id525 import Cell, FirewallLevel, RegistrationStatus, SimState
 
-from .coordinator import Id525Coordinator, Id525Data, PollingState
-from .entity import Id525Entity
+from .coordinator import Id525Coordinator, Id525Data, Id525Settings, PollingState
+from .entity import Id525Entity, Id525SettingsEntity
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from datetime import datetime, timedelta
+    from datetime import date, datetime, timedelta
 
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
@@ -38,6 +38,8 @@ if TYPE_CHECKING:
 PARALLEL_UPDATES = 0
 
 SIM_STATE_OPTIONS = [state.name.lower() for state in SimState]
+FIREWALL_LEVEL_OPTIONS = [level.value for level in FirewallLevel]
+VOIP_STATUS_OPTIONS = [status.name.lower() for status in RegistrationStatus]
 
 
 def _since(fetched_at: datetime, elapsed: timedelta | None) -> datetime | None:
@@ -255,6 +257,78 @@ SENSORS: tuple[Id525SensorEntityDescription, ...] = (
 )
 
 
+def _data_limit_gb(settings: Id525Settings) -> float | None:
+    """Return the data usage limit in GB, ``None`` when not set."""
+    account = settings.account
+    if not account.data_limit:
+        return None
+    if account.data_limit_unit == "MB":
+        return round(account.data_limit / 1024, 3)
+    return float(account.data_limit)
+
+
+def _voip_status(settings: Id525Settings) -> str:
+    status = settings.voip.registration_status
+    if status is None:  # the UI shows "Disabled" for a value it does not know
+        status = RegistrationStatus.DISABLED
+    return status.name.lower()
+
+
+@dataclass(frozen=True, kw_only=True)
+class Id525SettingsSensorEntityDescription(SensorEntityDescription):
+    """Sensor fed from the settings pages."""
+
+    value_fn: Callable[[Id525Settings], StateType | date]
+
+
+SETTINGS_SENSORS: tuple[Id525SettingsSensorEntityDescription, ...] = (
+    Id525SettingsSensorEntityDescription(
+        key="firewall_level",
+        translation_key="firewall_level",
+        device_class=SensorDeviceClass.ENUM,
+        options=FIREWALL_LEVEL_OPTIONS,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda s: s.firewall.level.value,
+    ),
+    Id525SettingsSensorEntityDescription(
+        key="voip_status",
+        translation_key="voip_status",
+        device_class=SensorDeviceClass.ENUM,
+        options=VOIP_STATUS_OPTIONS,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_voip_status,
+    ),
+    Id525SettingsSensorEntityDescription(
+        key="sim_pin_retries",
+        translation_key="sim_pin_retries",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda s: s.sim_pin.pin_retries,
+    ),
+    Id525SettingsSensorEntityDescription(
+        key="sim_puk_retries",
+        translation_key="sim_puk_retries",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        value_fn=lambda s: s.sim_pin.puk_retries,
+    ),
+    Id525SettingsSensorEntityDescription(
+        key="data_counters_reset",
+        translation_key="data_counters_reset",
+        device_class=SensorDeviceClass.DATE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda s: s.account.statistics_reset_date,
+    ),
+    Id525SettingsSensorEntityDescription(
+        key="data_limit",
+        translation_key="data_limit",
+        native_unit_of_measurement=UnitOfInformation.GIGABYTES,
+        device_class=SensorDeviceClass.DATA_SIZE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_data_limit_gb,
+    ),
+)
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: Id525ConfigEntry,
@@ -265,6 +339,7 @@ async def async_setup_entry(
     entities: list[SensorEntity] = [
         Id525Sensor(coordinator, description) for description in SENSORS
     ]
+    entities.extend(Id525SettingsSensor(coordinator, d) for d in SETTINGS_SENSORS)
     entities.append(Id525PollingStateSensor(coordinator))
     if coordinator.data.sms is not None:
         entities.append(Id525SmsSensor(coordinator))
@@ -287,6 +362,24 @@ class Id525Sensor(Id525Entity, SensorEntity):
     def native_value(self) -> StateType | datetime:
         """Return the sensor value."""
         return self.entity_description.value_fn(self.coordinator.data)
+
+
+class Id525SettingsSensor(Id525SettingsEntity, SensorEntity):
+    """A sensor showing a router setting."""
+
+    entity_description: Id525SettingsSensorEntityDescription
+
+    def __init__(
+        self, coordinator: Id525Coordinator, description: Id525SettingsSensorEntityDescription
+    ) -> None:
+        """Initialise the sensor."""
+        super().__init__(coordinator, description.key)
+        self.entity_description = description
+
+    @property
+    def native_value(self) -> StateType | date:
+        """Return the sensor value."""
+        return self.entity_description.value_fn(self.settings)
 
 
 class Id525SmsSensor(Id525Entity, SensorEntity):

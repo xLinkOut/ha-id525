@@ -6,7 +6,7 @@ from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, Device
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, MANUFACTURER
-from .coordinator import Id525Coordinator, PollingState
+from .coordinator import Id525Coordinator, Id525Settings, PollingState
 
 
 class Id525Entity(CoordinatorEntity[Id525Coordinator]):
@@ -43,3 +43,19 @@ class Id525Entity(CoordinatorEntity[Id525Coordinator]):
         if self._available_when_not_polling:
             return True
         return super().available and self.coordinator.polling_state is PollingState.ACTIVE
+
+
+class Id525SettingsEntity(Id525Entity):
+    """Entity fed from the settings pages, unavailable until they were read."""
+
+    @property
+    def available(self) -> bool:
+        """Return True if fresh data and the settings are there."""
+        return super().available and self.coordinator.data.settings is not None
+
+    @property
+    def settings(self) -> Id525Settings:
+        """Return the settings (only called while available)."""
+        settings = self.coordinator.data.settings
+        assert settings is not None  # noqa: S101
+        return settings

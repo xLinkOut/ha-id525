@@ -55,16 +55,18 @@
   "options": {
     "step": {
       "init": {
-        "title": "Polling options",
+        "title": "Options",
         "data": {
           "scan_interval": "Update interval",
           "kick_backoff": "Pause after a web UI login",
-          "fetch_sms": "Read SMS messages"
+          "fetch_sms": "Read SMS messages",
+          "allow_changes": "Allow commands"
         },
         "data_description": {
           "scan_interval": "Seconds between two reads of the router.",
           "kick_backoff": "Minutes to wait before logging in again when another login (e.g. the web UI) took over the session.",
-          "fetch_sms": "Expose the unread SMS counter and the latest message. Messages are never marked as read."
+          "fetch_sms": "Expose the unread SMS counter and the latest message. Messages are never marked as read.",
+          "allow_changes": "Lets Home Assistant send commands to the router: the Reboot button and the Ping and Traceroute actions. Off: the integration only reads."
         }
       }
     }
@@ -208,6 +210,39 @@
       },
       "lte_cell_id": {
         "name": "4G cell ID"
+      },
+      "firewall_level": {
+        "name": "Firewall level",
+        "state": {
+          "low": "Low",
+          "middle": "Medium",
+          "high": "High"
+        }
+      },
+      "voip_status": {
+        "name": "VoIP line",
+        "state": {
+          "up": "Registered",
+          "initializing": "Initializing",
+          "registering": "Registering",
+          "unregistering": "Unregistering",
+          "error": "Error",
+          "testing": "Testing",
+          "quiescent": "Idle",
+          "disabled": "Disabled"
+        }
+      },
+      "sim_pin_retries": {
+        "name": "SIM PIN attempts left"
+      },
+      "sim_puk_retries": {
+        "name": "SIM PUK attempts left"
+      },
+      "data_counters_reset": {
+        "name": "Data counters reset"
+      },
+      "data_limit": {
+        "name": "Data limit"
       }
     },
     "binary_sensor": {
@@ -219,11 +254,149 @@
       },
       "wifi": {
         "name": "Wi-Fi"
+      },
+      "vpn_passthrough": {
+        "name": "VPN passthrough"
+      },
+      "port_forwarding": {
+        "name": "Port forwarding",
+        "state_attributes": {
+          "rule_count": {
+            "name": "Rules"
+          }
+        }
+      },
+      "dmz": {
+        "name": "DMZ"
+      },
+      "url_filter": {
+        "name": "URL filter",
+        "state_attributes": {
+          "mode": {
+            "name": "Mode",
+            "state": {
+              "blacklist": "Block listed",
+              "whitelist": "Allow only listed"
+            }
+          },
+          "rule_count": {
+            "name": "Rules"
+          }
+        }
+      },
+      "ip_filter": {
+        "name": "IP filter",
+        "state_attributes": {
+          "mode": {
+            "name": "Mode",
+            "state": {
+              "blacklist": "Block listed",
+              "whitelist": "Allow only listed"
+            }
+          },
+          "rule_count": {
+            "name": "Rules"
+          }
+        }
+      },
+      "mac_filter": {
+        "name": "MAC filter",
+        "state_attributes": {
+          "mode": {
+            "name": "Mode",
+            "state": {
+              "blacklist": "Block listed",
+              "whitelist": "Allow only listed"
+            }
+          },
+          "rule_count": {
+            "name": "Rules"
+          }
+        }
+      },
+      "sim_pin_lock": {
+        "name": "SIM PIN lock"
       }
     },
     "switch": {
       "polling": {
         "name": "Polling"
+      }
+    },
+    "event": {
+      "sms": {
+        "name": "SMS",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "received": "Received"
+            }
+          },
+          "phone_number": {
+            "name": "Sender"
+          },
+          "text": {
+            "name": "Text"
+          },
+          "time": {
+            "name": "Time"
+          }
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "polling_inactive": {
+      "message": "The router is not polled right now ({state}): resume polling first. Logging in now would take the session away from the web UI."
+    },
+    "session_taken": {
+      "message": "Another login (probably the web UI) took over the router session. Polling is paused for a while; try again later."
+    },
+    "command_failed": {
+      "message": "The router command failed: {error}"
+    },
+    "invalid_input": {
+      "message": "The router would refuse this input: {error}"
+    },
+    "commands_disabled": {
+      "message": "Commands are turned off for {title}: enable \"Allow commands\" in the integration options."
+    }
+  },
+  "services": {
+    "ping": {
+      "name": "Ping",
+      "description": "Pings a host from the router and returns the replies. The router is busy until it is done.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Router",
+          "description": "The router to use (the only one if omitted)."
+        },
+        "host": {
+          "name": "Host",
+          "description": "Host name or IP address. The router's default if omitted."
+        },
+        "count": {
+          "name": "Count",
+          "description": "Number of echo requests, one per second. The router's default if omitted."
+        },
+        "size": {
+          "name": "Packet size",
+          "description": "Payload size in bytes. The router's default if omitted."
+        }
+      }
+    },
+    "traceroute": {
+      "name": "Traceroute",
+      "description": "Traces the route from the router to a host and returns the hops. Can take several minutes, during which the router answers nothing else.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Router",
+          "description": "The router to use (the only one if omitted)."
+        },
+        "host": {
+          "name": "Host",
+          "description": "Host name or IP address. The router's default if omitted."
+        }
       }
     }
   }

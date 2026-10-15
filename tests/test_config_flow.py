@@ -17,7 +17,12 @@ from id525 import (
 )
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.id525.const import CONF_FETCH_SMS, CONF_KICK_BACKOFF, DOMAIN
+from custom_components.id525.const import (
+    CONF_ALLOW_CHANGES,
+    CONF_FETCH_SMS,
+    CONF_KICK_BACKOFF,
+    DOMAIN,
+)
 
 from .conftest import HOST, ROUTER_MAC, USER_INPUT
 
@@ -145,6 +150,7 @@ async def test_options_flow(hass: HomeAssistant, setup_integration: MockConfigEn
         CONF_SCAN_INTERVAL: 120,
         CONF_KICK_BACKOFF: 30,
         CONF_FETCH_SMS: False,
+        CONF_ALLOW_CHANGES: False,  # off unless asked for
     }
     coordinator = setup_integration.runtime_data
     assert coordinator.update_interval.total_seconds() == 120

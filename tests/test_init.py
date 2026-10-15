@@ -230,5 +230,11 @@ async def test_diagnostics_are_redacted(
     text = str(diagnostics)
     for secret in ("secret", "350000000000000", "222010000000000", "192.168.1.10", "TestNet"):
         assert secret not in text
+    # VoIP account, proxy and password stand-in stay out
+    for secret in ("+390000000000", "proxy.fwa.example.it", "FAKE000"):
+        assert secret not in text
     assert diagnostics["client_count"] == 6
     assert diagnostics["polling_state"] == "active"
+    settings = diagnostics["settings"]
+    assert settings["firewall_level"] == "middle"
+    assert settings["mac_filter"] == {"enabled": False, "mode": "blacklist", "rule_count": 0}

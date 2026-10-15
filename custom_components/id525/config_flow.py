@@ -20,8 +20,10 @@ from id525 import (
 
 from . import create_client
 from .const import (
+    CONF_ALLOW_CHANGES,
     CONF_FETCH_SMS,
     CONF_KICK_BACKOFF,
+    DEFAULT_ALLOW_CHANGES,
     DEFAULT_FETCH_SMS,
     DEFAULT_HOST,
     DEFAULT_KICK_BACKOFF,
@@ -157,7 +159,7 @@ class Id525ConfigFlow(ConfigFlow, domain=DOMAIN):
 
 
 class Id525OptionsFlow(OptionsFlow):
-    """Polling options."""
+    """Polling options and the commands switch."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Manage the options."""
@@ -190,6 +192,10 @@ class Id525OptionsFlow(OptionsFlow):
                 ),
                 vol.Required(
                     CONF_FETCH_SMS, default=options.get(CONF_FETCH_SMS, DEFAULT_FETCH_SMS)
+                ): bool,
+                vol.Required(
+                    CONF_ALLOW_CHANGES,
+                    default=options.get(CONF_ALLOW_CHANGES, DEFAULT_ALLOW_CHANGES),
                 ): bool,
             }
         )

@@ -1,0 +1,33 @@
+ping:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: id525
+    host:
+      example: "1.1.1.1"
+      selector:
+        text:
+    count:
+      selector:
+        number:
+          min: 1
+          max: 100
+          mode: box
+    size:
+      selector:
+        number:
+          min: 1
+          mode: box
+          unit_of_measurement: bytes
+
+traceroute:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: id525
+    host:
+      example: "1.1.1.1"
+      selector:
+        text:
