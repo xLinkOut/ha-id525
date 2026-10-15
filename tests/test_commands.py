@@ -100,7 +100,7 @@ async def test_ping(
         host="1.1.1.1",
         count=2,
         size=64,
-        lines=("64 bytes from 1.1.1.1: seq=0 ttl=57 time=21 ms",) * 2,
+        lines=("64 bytes from 1.1.1.1: seq=0 ttl=57 time=21 ms\n",) * 2,
         completed=True,
     )
     response = await _ping(hass, host="1.1.1.1", count=2)

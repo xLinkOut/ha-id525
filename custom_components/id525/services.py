@@ -73,7 +73,7 @@ async def _async_ping(call: ServiceCall) -> ServiceResponse:
         "count": report.count,
         "size": report.size,
         "completed": report.completed,
-        "lines": list(report.lines),
+        "lines": [line.strip() for line in report.lines],  # the router ends each with a newline
     }
 
 
